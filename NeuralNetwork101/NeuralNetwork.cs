@@ -68,7 +68,7 @@ namespace NeuralNetwork101
                 Layer prevLayer = _layers[layerIndex - 1];
                 for (int neuronIndex = 0; neuronIndex < layer.Count - 1; ++neuronIndex)
                 {
-                    layer[neuronIndex].UpdateConnectionWeights(prevLayer);
+                    layer[neuronIndex].UpdateInputWeights(prevLayer);
                 }
             }
         }

@@ -15,10 +15,12 @@ namespace NeuralNetwork101
             }
         }
         public int Index { get; }
-        public double OutputValue { get; set; }
+
+        public double OutputValue { get; private set; }
+
+        public double Gradient { get; private set; }
 
         public List<Connection> Connections { get { return _connections; } }
-        private readonly List<Connection> _connections = new List<Connection>();
 
         public void FeedForward(Layer prevLayer)
         {
@@ -37,17 +39,32 @@ namespace NeuralNetwork101
             return Math.Tanh(value);
         }
 
-        public void CalcOutputGradients(double v)
+        private static double TransferFunctionDerivative(double value)
         {
+            return 1 - Math.Pow(value, 2.0); // Approximated by Taylor Expansion
+        }
+
+        public void CalcOutputGradients(double targetValue)
+        {
+            double delta = targetValue - OutputValue;
+            Gradient = delta * TransferFunctionDerivative(OutputValue);
         }
 
         public void CalcHiddenGradients(Layer nextLayer)
         {
+            double delta = sumDeltaOfWeights(nextLayer);
+            Gradient = delta * TransferFunctionDerivative(OutputValue);
         }
 
-        internal void UpdateConnectionWeights(Layer prevLayer)
+        private double sumDeltaOfWeights(Layer nextLayer)
         {
-            throw new NotImplementedException();
         }
+
+        public void UpdateInputWeights(Layer prevLayer)
+        {
+
+        }
+
+        private readonly List<Connection> _connections = new List<Connection>();
     }
 }
